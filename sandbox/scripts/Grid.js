@@ -1,12 +1,17 @@
-import { c } from "../main.js";
+function random(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+  }
+  
+
+import { c, GRIDSIZE } from "../main.js";
 
 export class Grid{
     
     constructor(cols, rows){
         this.cols = cols;
         this.rows = rows;
-
-        this.size = 50;
 
         this.matrix = this.createGrid();
     }
@@ -30,7 +35,7 @@ export class Grid{
                 if(this.matrix[i][j] === "a"){
                     c.beginPath();
                     c.fillStyle = "red";
-                    c.fillRect(i * this.size, j * this.size, this.size, this.size);
+                    c.fillRect(i * GRIDSIZE, j * GRIDSIZE, GRIDSIZE, GRIDSIZE);
                     c.closePath();
                 }
             }
@@ -39,8 +44,8 @@ export class Grid{
         for(let i = 0; i < this.cols + 1; i++){
             c.beginPath();
             c.strokeStyle = "white";
-            c.moveTo(i * this.size, 0);
-            c.lineTo(i * this.size, this.rows * 50);
+            c.moveTo(i * GRIDSIZE, 0);
+            c.lineTo(i * GRIDSIZE, this.rows * GRIDSIZE);
             c.stroke();
             c.closePath();
         }
@@ -48,8 +53,8 @@ export class Grid{
         for(let i = 0; i < this.rows + 1; i++){
             c.beginPath();
             c.strokeStyle = "white";
-            c.moveTo(0, i * this.size);
-            c.lineTo(this.rows * 50, i * this.size);
+            c.moveTo(0, i * GRIDSIZE);
+            c.lineTo(this.rows * GRIDSIZE, i * GRIDSIZE);
             c.stroke();
             c.closePath();
         }
@@ -57,8 +62,8 @@ export class Grid{
     }
 
     getGridMousePosition(x, y){
-        let colIndex = Math.floor(x / this.size);
-        let rowIndex = Math.floor(y / this.size);  
+        let colIndex = Math.floor(x / GRIDSIZE);
+        let rowIndex = Math.floor(y / GRIDSIZE);  
         
         if(colIndex >= this.cols){
             colIndex = this.cols - 1
@@ -82,6 +87,25 @@ export class Grid{
                 }
                 //Garante que não ira sobrepor peças
                 if(this.matrix[i][j + 1] !== undefined){
+                    //Randomiza o lado que a peça cai
+                    if(random(1, 2) == 1){
+                        console.log(random(1, 2))
+                        //se não estiver em um canto
+                        if(i - 1 >= 0){
+                            //se a peça em baixo a esquerda estiver vazia
+                            if(this.matrix[i - 1][j + 1] === undefined){
+                                this.matrix[i][j] = undefined
+                                this.matrix[i - 1][j + 1] = "a"
+                                continue
+                            }
+                        }
+                    }
+                    if(i + 1 < this.matrix.length){
+                        if(this.matrix[i + 1][j + 1] === undefined){
+                            this.matrix[i][j] = undefined
+                            this.matrix[i + 1][j + 1] = "a"
+                        }   
+                    }
                     continue
                 }
 
