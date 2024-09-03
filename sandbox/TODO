@@ -1,2 +1,2 @@
 Change the render to render at delta time instead of running faster in faster CPUs
-Make the sand fall to the sides
+Make some kind of UI to user select the type of particle
