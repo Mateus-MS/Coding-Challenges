@@ -20,4 +20,14 @@ export class Draw{
         c.closePath();
     }
 
+    static fillRect(position, size, color){
+        Validate.vector(position);
+        Validate.vector(size);
+
+        c.beginPath();
+        c.fillStyle = color;
+        c.fillRect(position.x, position.y, size.x, size.y);
+        c.closePath();
+    }
+
 }
