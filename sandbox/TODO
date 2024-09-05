@@ -1,2 +1,5 @@
 Change the render to render at delta time instead of running faster in faster CPUs
 Make some kind of UI to user select the type of particle
+
+BUG
+Particles when trying to slide diagonally trying to access outside of array range

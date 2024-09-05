@@ -2,6 +2,8 @@ import { c, GRIDSIZE } from "../main.js";
 import { Draw } from "./draw/Draw.js";
 import { Mathf } from "./math/Mathf.js";
 import { Vector2 } from "./math/Vector2.js";
+import { MOUSE } from "../main.js";
+import { Collision } from "./math/Collision.js";
 
 export class Grid{
     
@@ -34,6 +36,12 @@ export class Grid{
 
     changeBlock(x, y){
         //TODO make the user select the index it will be selected
+        if(x < 0 || x >= this.cols){
+            return
+        }
+        if(y < 0 || y >= this.rows){
+            return
+        }
         this.matrix[x][y] = 0;
     }
 
@@ -76,6 +84,8 @@ export class Grid{
 
         //Draw the line around the grid
         Draw.strokeRect(Vector2.zero(), this.sizePX, 'white');
+
+        this.drawCursor();
 
     }
 
@@ -140,6 +150,19 @@ export class Grid{
                 this.matrix[i][j + 1] = 0
             }
         }
+    }
+
+    drawCursor(){
+        if(this.isMouseInside()){
+            let res = this.getGridMousePosition(MOUSE.position.x, MOUSE.position.y);
+            let vec = new Vector2(res.x * GRIDSIZE, res.y * GRIDSIZE);
+
+            Draw.fillRect(vec, new Vector2(GRIDSIZE, GRIDSIZE), "rgba(255, 255, 255, .2)")
+        }
+    }
+
+    isMouseInside(){
+        return Collision.pointInRect(MOUSE.position, Vector2.zero(), this.sizePX)
     }
 
 }
